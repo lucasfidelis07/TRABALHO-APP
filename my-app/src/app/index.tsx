@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, FlatList } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import * as Location from 'expo-location';
@@ -9,9 +9,13 @@ const productsData = [
   { id: 2, name: 'Capacete Modelo B', description: 'Capacete leve e resistente, ideal para longas viagens.', price: 50, image: require('./images/capacete3.jpg') },
 ];
 
-export default function App() {
+export default function HomeScreen() {
   const [searchText, setSearchText] = useState('');
   const [city, setCity] = useState('');
+
+  useEffect(() => {
+    fetchLocation();
+  }, []);
 
   const fetchLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -21,21 +25,13 @@ export default function App() {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    console.log('Location:', location);
-
     let { latitude, longitude } = location.coords;
 
     let geocode = await Location.reverseGeocodeAsync({ latitude, longitude });
-    console.log('Geocode:', geocode);
-    
     if (geocode && geocode.length > 0) {
       let { city } = geocode[0];
       setCity(city || '');
     }
-  };
-
-  const handleLocationPress = () => {
-    fetchLocation();
   };
 
   const renderProductItem = ({ item }: { item: typeof productsData[0] }) => (
@@ -45,7 +41,7 @@ export default function App() {
       <Text style={styles.productDescription}>{item.description}</Text>
       <Text style={styles.productPrice}>R$ {item.price.toFixed(2)}</Text>
       <TouchableOpacity style={styles.buyButton}>
-        <Link href="/helmet">
+        <Link href={item.id === 2 ? "/helmet2" : "/helmet"}>
           <Text style={styles.buyButtonText}>Comprar</Text>
         </Link>
       </TouchableOpacity>
@@ -54,8 +50,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* BARRA DE PESQUISA */}
-      <View style={styles.searchBarContainer}>
+      <View style={styles.header}>
         <TextInput
           style={styles.searchInput}
           placeholder="Pesquisar produtos"
@@ -68,47 +63,35 @@ export default function App() {
         </TouchableOpacity>
       </View>
 
-      {/* BOTÃO DE LOCALIZAÇÃO */}
-      <TouchableOpacity style={styles.locationButton} onPress={handleLocationPress}>
+      <TouchableOpacity style={styles.locationButton} onPress={fetchLocation}>
         <Text style={styles.locationButtonText}>Minha Cidade: {city || 'Clique para obter a localização'}</Text>
       </TouchableOpacity>
 
-      {/* BANNER DE BOAS-VINDAS */}
       <View style={styles.welcomeBanner}>
         <Text style={styles.welcomeText}>SEJAM BEM-VINDOS À DUAS RODAS MOTORSPORT. CONFIRA ALGUNS PRODUTOS:</Text>
       </View>
 
-      {/* LISTA DE PRODUTOS */}
       <FlatList
         data={productsData}
         renderItem={renderProductItem}
         keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.productList}
       />
 
-      {/* FOOTER COM BOTÕES DE NAVEGAÇÃO */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.footerIcon}>
-          <Link href={"/"}>
-            <View style={styles.footerItem}>
-              <Feather name="home" size={24} color="#FF6D00" />
-              <Text style={styles.footerText}>Home</Text>
-            </View>
+          <Link href="/">
+            <Feather name="home" size={24} color="#FF6D00" />
           </Link>
         </TouchableOpacity>
         <TouchableOpacity style={styles.footerIcon}>
-          <Link href={"/department"}>
-            <View style={styles.footerItem}>
-              <Feather name="grid" size={24} color="#FF6D00" />
-              <Text style={styles.footerText}>Departamentos</Text>
-            </View>
+          <Link href="/department">
+            <Feather name="grid" size={24} color="#FF6D00" />
           </Link>
         </TouchableOpacity>
         <TouchableOpacity style={styles.footerIcon}>
-          <Link href={"/login"}>
-            <View style={styles.footerItem}>
-              <Feather name="user" size={24} color="#FF6D00" />
-              <Text style={styles.footerText}>Login</Text>
-            </View>
+          <Link href="/login">
+            <Feather name="user" size={24} color="#FF6D00" />
           </Link>
         </TouchableOpacity>
       </View>
@@ -121,19 +104,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  searchBarContainer: {
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16,
+    paddingHorizontal: 16,
+    marginTop: 10,
     marginBottom: 20,
     backgroundColor: '#f2f2f2',
     borderRadius: 8,
-    paddingHorizontal: 10,
-    marginTop: 10,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 10,
     fontSize: 16,
     color: '#333',
@@ -168,8 +150,12 @@ const styles = StyleSheet.create({
     color: '#FFF',
     textAlign: 'center',
   },
+  productList: {
+    paddingVertical: 10,
+  },
   productItem: {
-    padding: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
@@ -180,28 +166,29 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   productTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
     textAlign: 'center',
   },
   productDescription: {
     fontSize: 14,
     textAlign: 'center',
     color: '#666',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   productPrice: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#FF6D00',
-    marginBottom: 10,
+    textAlign: 'center',
   },
   buyButton: {
     backgroundColor: '#FF6D00',
     padding: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    marginTop: 10,
+    alignSelf: 'center',
   },
   buyButtonText: {
     color: 'white',
@@ -217,12 +204,5 @@ const styles = StyleSheet.create({
   },
   footerIcon: {
     alignItems: 'center',
-  },
-  footerItem: {
-    alignItems: 'center',
-  },
-  footerText: {
-    marginTop: 5,
-    color: '#FF6D00',
   },
 });

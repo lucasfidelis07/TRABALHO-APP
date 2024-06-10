@@ -21,7 +21,7 @@ const Helmet = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const productDocRef = doc(collection(firestore, "products"), "qV3qwMiwCSMQMTP24OO3");
+        const productDocRef = doc(collection(firestore, "products"), "xdWvKpcL5DVfrUqf59QX");
         const productDoc = await getDoc(productDocRef);
 
         if (productDoc.exists()) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, FlatList } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 
@@ -16,7 +16,7 @@ export default function Helmets() {
       <Text style={styles.helmetTitle}>{item.name}</Text>
       <Text style={styles.helmetPrice}>R$ {item.price.toFixed(2)}</Text>
       <TouchableOpacity style={styles.buyButton}>
-        <Link href="/helmet">
+        <Link href={item.name === 'Capacete ASX' ? "/helmet2" : "/helmet"}>
             <Text style={styles.buyButtonText}>Comprar</Text>
         </Link>
       </TouchableOpacity>
@@ -52,7 +52,6 @@ export default function Helmets() {
           <Link href={"/"}>
             <View style={styles.footerItem}>
               <Feather name="home" size={24} color="#FF6D00" />
-              <Text style={styles.footerText}>Home</Text>
             </View>
           </Link>
         </TouchableOpacity>
@@ -60,7 +59,6 @@ export default function Helmets() {
           <Link href={"/department"}>
             <View style={styles.footerItem}>
               <Feather name="grid" size={24} color="#FF6D00" />
-              <Text style={styles.footerText}>Departamentos</Text>
             </View>
           </Link>
         </TouchableOpacity>
@@ -68,7 +66,6 @@ export default function Helmets() {
           <Link href={"/login"}>
             <View style={styles.footerItem}>
               <Feather name="user" size={24} color="#FF6D00" />
-              <Text style={styles.footerText}>Login</Text>
             </View>
           </Link>
         </TouchableOpacity>
@@ -157,10 +154,6 @@ const styles = StyleSheet.create({
   },
   footerIcon: {
     alignItems: 'center',
-  },
-  footerText: {
-    marginTop: 5,
-    color: '#FF6D00',
   },
   footerItem: {
     alignItems: 'center',

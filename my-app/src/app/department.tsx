@@ -25,9 +25,9 @@ export default function Department() {
       {/* CATEGORIAS */}
       <View style={styles.categoriesContainer}>
         <TouchableOpacity style={styles.categoryButton}>
-            <Link href={"/helmets"}>
-                <Text style={styles.categoryButtonText}>CAPACETES</Text>
-            </Link>
+          <Link href={"/helmets"}>
+            <Text style={styles.categoryButtonText}>CAPACETES</Text>
+          </Link>
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryButton}>
           <Text style={styles.categoryButtonText}>ACESSÓRIOS</Text>
@@ -37,26 +37,23 @@ export default function Department() {
       {/* FOOTER COM BOTÕES DE NAVEGAÇÃO */}
       <View style={styles.footer}>
         <TouchableOpacity style={styles.footerIcon}>
-            <Link href={"/"}>
-                <View style={styles.footerItem}>
-                    <Feather name="home" size={24} color="#FF6D00" />
-                    <Text style={styles.footerText}>Home</Text>
-                 </View>
-            </Link>
+          <Link href={"/"}>
+            <View style={styles.footerItem}>
+              <Feather name="home" size={24} color="#FF6D00" />
+            </View>
+          </Link>
         </TouchableOpacity>
         <TouchableOpacity style={styles.footerIcon}>
-            <Link href={"/department"}>
-                <View style={styles.footerItem}>
-                    <Feather name="grid" size={24} color="#FF6D00" />
-                    <Text style={styles.footerText}>Departamentos</Text>
-                 </View>
-            </Link>
+          <Link href={"/department"}>
+            <View style={styles.footerItem}>
+              <Feather name="grid" size={24} color="#FF6D00" />
+            </View>
+          </Link>
         </TouchableOpacity>
         <TouchableOpacity style={styles.footerIcon}>
           <Link href={"/login"}>
             <View style={styles.footerItem}>
               <Feather name="user" size={24} color="#FF6D00" />
-              <Text style={styles.footerText}>Login</Text>
             </View>
           </Link>
         </TouchableOpacity>
@@ -131,10 +128,6 @@ const styles = StyleSheet.create({
   },
   footerIcon: {
     alignItems: 'center',
-  },
-  footerText: {
-    marginTop: 5,
-    color: '#FF6D00',
   },
   footerItem: {
     alignItems: 'center',
